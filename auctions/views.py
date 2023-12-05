@@ -6,11 +6,12 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .forms import ListingForm
 
-from .models import User
+from .models import User, Listing
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    active_listings = Listing.objects.filter(status='active')
+    return render(request, "auctions/index.html", {'active_listings': active_listings})
 
 
 def login_view(request):

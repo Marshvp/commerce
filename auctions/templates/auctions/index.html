@@ -2,6 +2,23 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
+    {% if active_listings %}
+    <ul class="list-unstyled">
+      {% for listing in active_listings %}
+        <div class="card w-50 mt-5  text-align-center" style="border-width: 6px; border-color: aqua;">
+        <li>
+                <h5 class="card-title d-flex justify-content-center">{{ listing.listing_title }}</h5>
+            <div class="d-flex justify-content-center align-items-center mb-2">
+                <img src="https://picsum.photos/1000" style="width: 300px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
+            </div>
+            <p class="card-text m-1">{{ listing.listing_description }}</p>
+            <h6 class="card-subtitle m-1 text-muted">Current Price: {{ listing.listing_current_price }}</h6>
+            <a href="#" class="btn btn-primary m-1">Make a bid!</a>
+        </li>
+        </div>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No active listings at the moment.</p>
+  {% endif %}
 {% endblock %}
