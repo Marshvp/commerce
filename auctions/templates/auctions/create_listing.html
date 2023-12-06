@@ -9,12 +9,10 @@
             {% csrf_token %}
         
             <div class="form-group">
-                <label for="{{ form.listing_title.id_for_label }}">Title:</label>
                 {{ form.listing_title|as_crispy_field }}
             </div>
         
             <div class="form-group">
-                <label for="{{ form.listing_description.id_for_label }}">Description:</label>
                 {{ form.listing_description|as_crispy_field }}
             </div>
         

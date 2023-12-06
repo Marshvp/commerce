@@ -1,0 +1,38 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+
+<h1>{{ listing.listing_title }}</h1>
+<img src="{{ listing.listing_image_url }}">
+<p>{{ listing.listing_description }}</p>
+    {% if listing.listing_current_price < listing.listing_starting_price %}
+        <p>{{ listing.listing_starting_price }}</p>
+    {% else %}
+        <p>{{ listing.listing_current_price }}</p>
+    {% endif %}
+
+<form method="post" action="{% url 'place_bid' listing.id %}">
+    {% csrf_token %}
+    <label for="id_buyer_bid">Your Bid:</label>
+    <input type="number" name="buyer_bid" id="id_buyer_bid" step="0.01" required>
+    <button type="submit">Place Bid</button>
+</form>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<!-- Display existing bids if needed -->
+<h3>Existing Bids:</h3>
+<ul>
+    {% for bid in bids %}
+        <li>{{ bid.user.username }} - ${{ bid.buyer_bid }}</li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}

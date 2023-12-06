@@ -9,11 +9,11 @@
         <li>
                 <h5 class="card-title d-flex justify-content-center">{{ listing.listing_title }}</h5>
             <div class="d-flex justify-content-center align-items-center mb-2">
-                <img src="https://picsum.photos/1000" style="width: 300px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
+                <img src="{{ listing.listing_image_url}}" style="width: 300px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
             </div>
             <p class="card-text m-1">{{ listing.listing_description }}</p>
-            <h6 class="card-subtitle m-1 text-muted">Current Price: {{ listing.listing_current_price }}</h6>
-            <a href="#" class="btn btn-primary m-1">Make a bid!</a>
+            <h6 class="card-subtitle m-1 text-muted">Current Price: {{ listing.listing_starting_price }}</h6>
+            <a href="{% url 'listing_page' listing.id %}" class="btn btn-primary m-1">View Listing</a>
         </li>
         </div>
       {% endfor %}
