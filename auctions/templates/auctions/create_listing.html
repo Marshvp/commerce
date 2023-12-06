@@ -1,12 +1,40 @@
 {% extends 'auctions/layout.html' %}
 
-        {% block body %}
+{% load crispy_forms_tags %}
 
-        <form method="post" action="{% url 'create_listing' %}">
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <form method="post" action="{% url 'create_listing' %}" novalidate class="col-md-6 m-5">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">List item</button>
-          </form>
-
-
-        {% endblock %}
+        
+            <div class="form-group">
+                <label for="{{ form.listing_title.id_for_label }}">Title:</label>
+                {{ form.listing_title|as_crispy_field }}
+            </div>
+        
+            <div class="form-group">
+                <label for="{{ form.listing_description.id_for_label }}">Description:</label>
+                {{ form.listing_description|as_crispy_field }}
+            </div>
+        
+            <div class="form-group">
+                <label for="{{ form.starting_bid.id_for_label }}">Starting Bid ($):</label>
+                {{ form.listing_starting_price|as_crispy_field }}
+            </div>
+        
+            <div class="form-group">
+                <label for="{{ form.image_url.id_for_label }}">Image URL:</label>
+                {{ form.listing_image_url|as_crispy_field }}
+            </div>
+        
+            <div class="form-group">
+                <label for="{{ form.category.id_for_label }}">Category:</label>
+                {{ form.listing_category|as_crispy_field }}
+            </div>
+        
+            <button type="submit" class="btn btn-primary">List Item</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
