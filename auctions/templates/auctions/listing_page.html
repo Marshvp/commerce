@@ -14,13 +14,33 @@
     {% else %}
         <p>{{ listing.listing_current_price }}</p>
     {% endif %}
+    {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+    {% endif %}
+    {% if user.is_authenticated %}
+      {% if listing_id not in user_watchlist_ids %}
+          <a href="{% url 'watchlist_btn' listing_id %}">Add to Watchlist</a>
+      {% else %}
+          <p>This listing is already in your watchlist.</p>
+      {% endif %}
+    {% else %}
+          <h3><a href="{% url 'login' %}">Sign in to make a bid</a></h3>
+    {% endif %}
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'place_bid' listing.id %}">
+          {% csrf_token %}
+            <label for="id_buyer_bid">Your Bid:</label>
+            <input type="number" name="buyer_bid" id="id_buyer_bid" step="0.01" required>
+            <button type="submit">Place Bid</button>
+        </form>
+    {% else %}
+        <h3><a href="{% url 'login' %}">Sign in to make a bid</a></h3>
+    {% endif %}
 
-<form method="post" action="{% url 'place_bid' listing.id %}">
-    {% csrf_token %}
-    <label for="id_buyer_bid">Your Bid:</label>
-    <input type="number" name="buyer_bid" id="id_buyer_bid" step="0.01" required>
-    <button type="submit">Place Bid</button>
-</form>
 
 {% if messages %}
   <ul class="messages">
@@ -32,9 +52,14 @@
 
 <!-- Display existing bids if needed -->
 <h3>Existing Bids:</h3>
+  {% if bids %}
+      <h5>Total Bids: {{ bids.count }}</h5>
+  {% else %}
+      <h5>No Bids Yet</h5>
+  {% endif %}
 <ul>
-    {% for bid in bids %}
-        <li>{{ bid.user.username }} - ${{ bid.buyer_bid }}</li>
+    {% for bid in bids reversed %}
+        <li>{{ bid.user.username }} - ${{ bid.buyer_bid }} - Bid Made at {{ bid.created_at }}</li>
     {% endfor %}
 </ul>
 

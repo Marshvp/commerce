@@ -1,0 +1,18 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+  <h2>Your Watchlist</h2>
+  {% if user_watchlist %}
+    <ul class="list-unstyled">
+      {% for listing in user_watchlist %}
+        <li>
+          <h5>{{ listing.listing_title }}</h5>
+          <!-- Add other details you want to display -->
+          <a href="{% url 'listing_page' listing.id %}" class="btn btn-primary">View Listing</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Your watchlist is empty.</p>
+  {% endif %}
+{% endblock %}

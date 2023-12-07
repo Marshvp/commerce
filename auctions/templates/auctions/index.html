@@ -5,7 +5,7 @@
     {% if active_listings %}
     <ul class="list-unstyled">
       {% for listing in active_listings %}
-        <div class="card w-50 mt-5  text-align-center" style="border-width: 6px; border-color: aqua;">
+        <div class="card w-50 mt-5 container" style="border-width: 6px; border-color: aqua;">
         <li>
                 <h5 class="card-title d-flex justify-content-center">{{ listing.listing_title }}</h5>
             <div class="d-flex justify-content-center align-items-center mb-2">
@@ -17,11 +17,16 @@
             </div>
             <p class="card-text m-1">{{ listing.listing_description }}</p>
             {% if listing.listing_current_price < listing.listing_starting_price %}
-              <h6 class="card-subtitle m-1 text-muted">Current Price:{{ listing.listing_starting_price }}</h6>
+              <h5 class="card-subtitle m-1">Current Price:{{ listing.listing_starting_price }}</h5>
             {% else %}
-              <h6 class="card-subtitle m-1 text-muted">Current Price:{{ listing.listing_current_price }}</h6>
+              <h5 class="card-subtitle m-1">Current Price:{{ listing.listing_current_price }}</h5>
             {% endif %}
+
+            <p class="m-1">Total Bids: {{ listing.num_bids }}</p>
+            <p class="m-1">Created By: {{ listing.seller}}</p>
+            <div class="d-flex justify-content-center align-items-center">
             <a href="{% url 'listing_page' listing.id %}" class="btn btn-primary m-1">View Listing</a>
+            </div>
         </li>
         </div>
       {% endfor %}

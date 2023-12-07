@@ -16,6 +16,7 @@ class Listing(models.Model):
                 listing_current_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0)
                 created_at = models.DateTimeField(auto_now_add=True)
                 updated_at = models.DateTimeField(auto_now=True)
+                watchlisted_users = models.ManyToManyField(User, blank=True, related_name="watchlist")
                 
                 # Status
                 STATUS_CHOICES = [
