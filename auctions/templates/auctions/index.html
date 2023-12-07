@@ -9,10 +9,18 @@
         <li>
                 <h5 class="card-title d-flex justify-content-center">{{ listing.listing_title }}</h5>
             <div class="d-flex justify-content-center align-items-center mb-2">
-                <img src="{{ listing.listing_image_url}}" style="width: 300px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
+          {% if listing.listing_image_url == None %}
+              <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" style="width: 350px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
+          {% else %}
+              <img src="{{ listing.listing_image_url }}" style="width: 350px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
+          {% endif %}
             </div>
             <p class="card-text m-1">{{ listing.listing_description }}</p>
-            <h6 class="card-subtitle m-1 text-muted">Current Price: {{ listing.listing_starting_price }}</h6>
+            {% if listing.listing_current_price < listing.listing_starting_price %}
+              <h6 class="card-subtitle m-1 text-muted">Current Price:{{ listing.listing_starting_price }}</h6>
+            {% else %}
+              <h6 class="card-subtitle m-1 text-muted">Current Price:{{ listing.listing_current_price }}</h6>
+            {% endif %}
             <a href="{% url 'listing_page' listing.id %}" class="btn btn-primary m-1">View Listing</a>
         </li>
         </div>

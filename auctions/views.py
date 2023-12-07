@@ -6,12 +6,20 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .forms import ListingForm, BidForm
 from django.contrib import messages
+from decimal import Decimal
 
 from .models import User, Listing, Bids
 
 
 def index(request):
     active_listings = Listing.objects.filter(status='active')
+
+    for listing in active_listings:
+        if listing.listing_current_price is None:
+            listing.listing_current_price = listing.listing_starting_price
+            listing.save()
+
+
     return render(request, "auctions/index.html", {'active_listings': active_listings})
 
 

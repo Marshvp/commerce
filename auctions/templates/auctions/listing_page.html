@@ -3,9 +3,13 @@
 {% block body %}
 
 <h1>{{ listing.listing_title }}</h1>
-<img src="{{ listing.listing_image_url }}">
+  {% if listing.listing_image_url == None %}
+    <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" style="width: 350px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
+  {% else %}
+    <img src="{{ listing.listing_image_url }}" style="width: 350px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
+  {% endif %}
 <p>{{ listing.listing_description }}</p>
-    {% if listing.listing_current_price < listing.listing_starting_price %}
+    {% if listing.listing_current_price < listing.listing_starting_price or listing.listing_current_price == None %}
         <p>{{ listing.listing_starting_price }}</p>
     {% else %}
         <p>{{ listing.listing_current_price }}</p>
