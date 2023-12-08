@@ -97,8 +97,14 @@ def listing_page(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     comments = listing.comments.all()
     bids = listing.bids.all()
-
-    return render(request,'auctions/listing_page.html', {'listing':listing, 'comments':comments, 'bids':bids, 'listing_id': listing.id})
+    status = listing.status
+    winner = listing.winner
+    
+    if status == 'closed':
+        print(f"status:{status}. Winner is {winner}")
+        return render(request,'auctions/closed_listing.html', {'listing':listing, 'comments':comments, 'bids':bids, 'listing_id': listing.id, 'winner': winner})
+    else:
+        return render(request,'auctions/listing_page.html', {'listing':listing, 'comments':comments, 'bids':bids, 'listing_id': listing.id})
 
 
 
@@ -164,6 +170,7 @@ def watchlist_page(request):
 
 @login_required
 def add_comment(request, listing_id):
+
     listing = get_object_or_404(Listing, pk=listing_id)
 
     if request.method == 'POST':
@@ -178,3 +185,24 @@ def add_comment(request, listing_id):
         form = CommentForm()
 
     return redirect('listing_page', listing_id=listing_id)
+
+@login_required
+def close_auction(request, listing_id):
+
+    listing = get_object_or_404(Listing, pk=listing_id)
+
+    if listing.status == 'active':
+        # Change the status to 'closed'
+        listing.status = 'closed'
+        listing.save()
+
+        # Determine the winner based on your logic (e.g., highest bidder)
+        winner = listing.determine_winner()
+        
+        if winner:
+            listing.winner = winner
+            listing.save()
+        
+    return redirect('listing_page', listing_id=listing_id)
+
+

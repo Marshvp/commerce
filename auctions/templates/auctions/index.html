@@ -17,9 +17,9 @@
             </div>
             <p class="card-text m-1">{{ listing.listing_description }}</p>
             {% if listing.listing_current_price < listing.listing_starting_price %}
-              <h5 class="card-subtitle m-1">Current Price:{{ listing.listing_starting_price }}</h5>
+              <h5 class="card-subtitle m-1">Current Price: ${{ listing.listing_starting_price }}</h5>
             {% else %}
-              <h5 class="card-subtitle m-1">Current Price:{{ listing.listing_current_price }}</h5>
+              <h5 class="card-subtitle m-1">Current Price: ${{ listing.listing_current_price }}</h5>
             {% endif %}
 
             <p class="m-1">Total Bids: {{ listing.num_bids }}</p>

@@ -17,7 +17,7 @@ class Listing(models.Model):
                 created_at = models.DateTimeField(auto_now_add=True)
                 updated_at = models.DateTimeField(auto_now=True)
                 watchlisted_users = models.ManyToManyField(User, blank=True, related_name="watchlist")
-                
+                winner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name="won_auctions")
                 # Status
                 STATUS_CHOICES = [
                     ('active', 'Active'),
@@ -29,6 +29,17 @@ class Listing(models.Model):
 
                 def __str__(self):
                     return self.listing_title
+                
+                def determine_winner(self):
+                    # Check if there are any bids for this listing
+                    if self.bids.exists():
+                        # Get the highest bid
+                        highest_bid = self.bids.order_by('-buyer_bid').first()
+
+                            # Return the user who made the highest bid
+                        return highest_bid.user
+
+                    return None
                 
 
 

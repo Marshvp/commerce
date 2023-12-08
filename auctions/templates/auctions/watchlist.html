@@ -5,11 +5,29 @@
   {% if user_watchlist %}
     <ul class="list-unstyled">
       {% for listing in user_watchlist %}
-        <li>
-          <h5>{{ listing.listing_title }}</h5>
-          <!-- Add other details you want to display -->
-          <a href="{% url 'listing_page' listing.id %}" class="btn btn-primary">View Listing</a>
-        </li>
+        <div class="card w-50 mt-5 container" style="border-width: 6px; border-color: aqua;">
+          <li>
+            <h5 class="card-title d-flex justify-content-center">{{ listing.listing_title }}</h5>
+            <div class="d-flex justify-content-center align-items-center mb-2">
+              {% if listing.listing_image_url == None %}
+                <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" style="width: 350px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
+              {% else %}
+                <img src="{{ listing.listing_image_url }}" style="width: 350px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
+              {% endif %}
+            </div>
+            <p class="card-text m-1">{{ listing.listing_description }}</p>
+            {% if listing.listing_current_price < listing.listing_starting_price %}
+              <h5 class="card-subtitle m-1">Current Price: ${{ listing.listing_starting_price }}</h5>
+            {% else %}
+              <h5 class="card-subtitle m-1">Current Price: ${{ listing.listing_current_price }}</h5>
+            {% endif %}
+            <p class="m-1">Total Bids: {{ listing.bids.count }}</p>
+            <p class="m-1">Created By: {{ listing.seller }}</p>
+            <div class="d-flex justify-content-center align-items-center">
+              <a href="{% url 'listing_page' listing.id %}" class="btn btn-primary m-1">View Listing</a>
+            </div>
+          </li>
+        </div>
       {% endfor %}
     </ul>
   {% else %}

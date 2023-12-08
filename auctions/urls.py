@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import create_listing, listing_page, place_bid, watchlist_page, watchlist_btn, add_comment
+from .views import create_listing, listing_page, place_bid, watchlist_page, watchlist_btn, add_comment,close_auction
 
 
 urlpatterns = [
@@ -14,5 +14,6 @@ urlpatterns = [
     path('watchlist/', watchlist_page, name='watchlist_page'),
     path('watchlist_btn/<int:listing_id>/', watchlist_btn, name='watchlist_btn'),
     path('add_comment/<int:listing_id>/',add_comment, name='add_comment'),
+    path('close_auction/<int:listing_id>/', close_auction, name='close_auction'),
 
 ]
