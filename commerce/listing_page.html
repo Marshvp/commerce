@@ -1,7 +1,5 @@
 {% extends 'auctions/layout.html' %}
 
-{% load crispy_forms_tags %}
-
 {% block body %}
 <div class="container-fluid text-center mx-auto">
   <div class="row">
@@ -13,11 +11,11 @@
     {% else %}
       <img src="{{ listing.listing_image_url }}" style="width: 350px; height: 200px; align-items: center;" class="card-img-top img-fluid" alt="">
     {% endif %}
-    <p class="mt-5">{{ listing.listing_description }}</p>
+    <p>{{ listing.listing_description }}</p>
       {% if listing.listing_current_price < listing.listing_starting_price or listing.listing_current_price == None %}
-          <h3 class="mt-2">${{ listing.listing_starting_price }}</h3>
+          <h3>${{ listing.listing_starting_price }}</h3>
       {% else %}
-          <h3 class="mt-2">${{ listing.listing_current_price }}</h3>
+          <h3>${{ listing.listing_current_price }}</h3>
       {% endif %}
     </div>
   </div>
@@ -27,15 +25,15 @@
         {% if listing in user_watchlist %}
             <p>This listing is already in your watchlist.</p>
         {% else %}
-            <a class="btn btn-primary mt-2" href="{% url 'watchlist_btn' listing_id %}">Add to Watchlist</a>
+            <a href="{% url 'watchlist_btn' listing_id %}">Add to Watchlist</a>
         {% endif %}
       {% else %}
-            <h3><a class="btn btn-primary mt-2" href="{% url 'login' %}">Sign in to make a bid</a></h3>
+            <h3><a href="{% url 'login' %}">Sign in to make a bid</a></h3>
       {% endif %}
   </div>
 
       <div class="container-fluid">
-        <h5 class="btn btn-primary mt-2">Delete</h5>
+        <h5>Delete</h5>
       
         {% if user.is_authenticated %}
             <form method="post" action="{% url 'place_bid' listing.id %}">
@@ -61,40 +59,17 @@
         {% endif %}
       </div>
 <!-- Display existing bids if needed -->
-<div class="container-fluid">
-  <div class="row">
-    <div class="col">
-          <h3>Existing Bids:</h3>
-              {% if bids %}
-                  <h3>Total Bids: {{ bids.count }}</h3>
-              {% else %}
-                  <h3>No Bids Yet</h3>
-              {% endif %}
-            <ul>
-                {% for bid in bids reversed %}
-                    <li>{{ bid.user.username }} - ${{ bid.buyer_bid }} - Bid Made at {{ bid.created_at }}</li>
-                {% endfor %}
-            </ul>
-    </div>   
-    <div class="col">
-      <h3>Comments:</h3>
-        {% if user.is_authenticated %}
-
-        <h3>Add a Comment:</h3>
-        <form method="post" action="{% url 'add_comment' listing.id %}">
-          {% csrf_token %}
-          <input type="text" name="comment_contents" id="id_comment_contents" required>
-          <button type="submit">Add Comment</button>
-        </form>
-        {% endif %}
+<h3>Existing Bids:</h3>
+  {% if bids %}
+      <h5>Total Bids: {{ bids.count }}</h5>
+  {% else %}
+      <h5>No Bids Yet</h5>
+  {% endif %}
+<ul>
+    {% for bid in bids reversed %}
+        <li>{{ bid.user.username }} - ${{ bid.buyer_bid }} - Bid Made at {{ bid.created_at }}</li>
+    {% endfor %}
+</ul>
 
 
-        <ol type="1">
-          {% for comment in comments reversed %}
-            <li>{{ comment.user.username }} - {{ comment.comment_contents }} - {{ comment.created_at }}</li>
-            {% endfor %}
-        </ol>
-    </div>   
-  </div>
-</div>
 {% endblock %}

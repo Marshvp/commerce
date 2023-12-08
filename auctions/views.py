@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .forms import ListingForm, BidForm
+from .forms import ListingForm, BidForm, CommentForm
 from django.contrib import messages
 from decimal import Decimal
 from django.db.models import Count
@@ -158,3 +158,21 @@ def watchlist_page(request):
     user_watchlist = request.user.watchlist.all()
     
     return render(request, 'auctions/watchlist.html', {'user_watchlist': user_watchlist})
+
+
+@login_required
+def add_comment(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.listing = listing
+            comment.user = request.user
+            comment.save()
+            return redirect('listing_page', listing_id=listing_id)
+    else:
+        form = CommentForm()
+
+    return redirect('listing_page', listing_id=listing_id)
