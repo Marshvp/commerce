@@ -5,7 +5,7 @@
 {% block body %}
 <div class="container-fluid text-center mx-auto">
   <div class="row">
-      <h1 class="col">{{ listing.listing_title }}</h1>
+      <h1 class="col"><u>{{ listing.listing_title }}</u></h1>
   </div>
   <div class="col mt-5 mx-auto text-center content">
     {% if listing.listing_image_url == None %}
@@ -15,38 +15,33 @@
     {% endif %}
     <p class="mt-5">{{ listing.listing_description }}</p>
       {% if listing.listing_current_price < listing.listing_starting_price or listing.listing_current_price == None %}
-          <h3 class="mt-2">${{ listing.listing_starting_price }}</h3>
+          <h3 class="mt-2"><u>${{ listing.listing_starting_price }}</u></h3>
       {% else %}
-          <h3 class="mt-2">${{ listing.listing_current_price }}</h3>
+          <h3 class="mt-2"><u>${{ listing.listing_current_price }}</u></h3>
       {% endif %}
     </div>
   </div>
   <div class="container-fluid">
   
-      {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
         {% if listing in user_watchlist %}
             <p>This listing is already in your watchlist.</p>
         {% else %}
-            <a class="btn btn-primary mt-2" href="{% url 'watchlist_btn' listing_id %}">Add to Watchlist</a>
+            <form method="post" action="{% url 'watchlist_btn' listing.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary mt-2">Add to Watchlist</button>
+            </form>
         {% endif %}
-      {% else %}
-            <h3><a class="btn btn-primary mt-2" href="{% url 'login' %}">Sign in to make a bid</a></h3>
-      {% endif %}
+    {% else %}
+        <h3><a class="btn btn-primary mt-2" href="{% url 'login' %}">Sign in to manage your watchlist</a></h3>
+    {% endif %}
+
   </div>
 
       <div class="container-fluid">
-        <h5 class="btn btn-primary mt-2">Delete</h5>
+        <h5 class="btn btn-primary mt-2 mb-4">Delete</h5>
       
-        {% if user.is_authenticated %}
-            <form method="post" action="{% url 'place_bid' listing.id %}">
-              {% csrf_token %}
-                <label for="id_buyer_bid">Your Bid:</label>
-                <input type="number" name="buyer_bid" id="id_buyer_bid" step="0.01" required>
-                <button type="submit">Place Bid</button>
-            </form>
-        {% else %}
-            <h3><a href="{% url 'login' %}">Sign in to make a bid</a></h3>
-        {% endif %}
+        
      
     
   
@@ -60,31 +55,49 @@
           </ul>
         {% endif %}
       </div>
-<!-- Display existing bids if needed -->
+
 <div class="container-fluid">
   <div class="row">
     <div class="col">
-          <h3>Existing Bids:</h3>
+
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'place_bid' listing.id %}" class="form-inline">
+          {% csrf_token %}
+          <label for="id_buyer_bid">Your Bid:</label>
+          <input type="number" name="buyer_bid" id="id_buyer_bid" step="0.01" required>
+          <small class="form-text text-danger">
+              {% if form.buyer_bid.errors %}
+                {{ form.buyer_bid.errors.0 }}
+              {% endif %}
+          </small>
+          <button class="btn btn-primary" type="submit">Place Bid</button>
+        </form>
+      {% else %}
+        <h3><a href="{% url 'login' %}">Sign in to make a bid</a></h3>
+      {% endif %}
+
+          <h3><u>Existing Bids:</u></h3>
               {% if bids %}
-                  <h3>Total Bids: {{ bids.count }}</h3>
+                  <h3><u>Total Bids: {{ bids.count }}</u></h3>
               {% else %}
                   <h3>No Bids Yet</h3>
               {% endif %}
-            <ul>
-                {% for bid in bids reversed %}
-                    <li>{{ bid.user.username }} - ${{ bid.buyer_bid }} - Bid Made at {{ bid.created_at }}</li>
-                {% endfor %}
-            </ul>
+
+              <ul>
+                  {% for bid in bids reversed %}
+                      <li>{{ bid.user.username }} - ${{ bid.buyer_bid }} - Bid Made at {{ bid.created_at }}</li>
+                  {% endfor %}
+              </ul>
     </div>   
     <div class="col">
-      <h3>Comments:</h3>
+      <h3><u>Comments:</u></h3>
         {% if user.is_authenticated %}
 
-        <h3>Add a Comment:</h3>
-        <form method="post" action="{% url 'add_comment' listing.id %}">
+        <h3><u>Add a Comment:</u></h3>
+        <form method="post" action="{% url 'add_comment' listing.id %}" class="form-inline mb-2">
           {% csrf_token %}
-          <input type="text" name="comment_contents" id="id_comment_contents" required>
-          <button type="submit">Add Comment</button>
+          <input type="text" name="comment_contents" id="id_comment_contents" class="form-control w-50" required>
+          <button class="btn btn-primary ml-2" type="submit">Add Comment</button>
         </form>
         {% endif %}
 

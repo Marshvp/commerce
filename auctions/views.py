@@ -134,23 +134,25 @@ def place_bid(request, listing_id):
 
 @login_required
 def watchlist_btn(request, listing_id):
+
+    
     listing = get_object_or_404(Listing, pk=listing_id)
     user_watchlist = request.user.watchlist.all()
 
+
+    
+
     if listing in user_watchlist:
-        # If listing is already in watchlist, display a message
-        messages.info(request, 'This listing is already in your watchlist.')
+            # If listing is already in watchlist, display a message
+            messages.info(request, 'This listing is already in your watchlist.')
     else:
-        # If not, add it to the watchlist
-        request.user.watchlist.add(listing)
-        messages.success(request, 'Listing added to your watchlist.')
+            # If not, add it to the watchlist
+            request.user.watchlist.add(listing)
+            messages.success(request, 'Listing added to your watchlist.')
 
-    # Redirect to the listing_page with the listing_id
-        return redirect('listing_page', listing_id=listing_id)
+        # Redirect to the listing_page with the listing_id
+    return redirect('listing_page', listing_id=listing_id)
 
-# If user is not authenticated, redirect them to sign in
-    messages.warning(request, 'Please sign in to manage your watchlist.')
-    return redirect('login')  # Adjust 'login' to your actual login URL # Adjust 'login' to your actual login URL
 
 @login_required
 def watchlist_page(request):
